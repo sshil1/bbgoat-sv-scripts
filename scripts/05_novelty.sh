@@ -24,7 +24,7 @@ printf 'catalogue DEL/INS entries >=50bp\t'; $E/bcftools view -H $W/db8.vcf.gz |
 $E/bcftools view -s D01 -t '^NW_017189516.1,NW_017189517.1,NW_017189518.1' -O z -o $W/ours.vcf.gz $HI
 $E/tabix -f -p vcf $W/ours.vcf.gz
 printf 'our autosomal high-confidence SVs\t'; $E/bcftools view -H $W/ours.vcf.gz | wc -l
-rm -rf $W/bench
+rm -rf -- "${W:?}/bench"
 $E/truvari bench -b $W/db8.vcf.gz -c $W/ours.vcf.gz -o $W/bench --sizemin 50 --sizefilt 50 \
   --sizemax 100000 --pctseq 0 --pctsize 0.7 --refdist 500 --dup-to-ins > $W/bench.log 2>&1 \
   || { echo "truvari failed:"; tail -6 $W/bench.log; exit 1; }

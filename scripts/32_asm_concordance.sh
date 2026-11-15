@@ -78,14 +78,14 @@ for A in D01 C01; do
   S=$(grep -m1 -i "$A" set.samples.txt || true)
   [ -n "$S" ] || { echo "no sample matching $A in set.samples.txt"; exit 1; }
   log "svim-asm $A (sample $S)"
-  rm -rf "svim_$A"
+  rm -rf -- "svim_${A:?}"
   "$SVENV/bin/svim-asm" diploid ${EXTRA[@]+"${EXTRA[@]}"} "svim_$A" "${A}_hap1.bam" "${A}_hap2.bam" "$REF" > "svim_$A.log" 2>&1
   bcftools sort -Oz -o "svim_$A.all.vcf.gz" "svim_$A/variants.vcf"; tabix -f -p vcf "svim_$A.all.vcf.gz"
   bcftools view -r "$AUTOS" -i 'SVTYPE="DEL"||SVTYPE="INS"' -Oz -o "asm_$A.vcf.gz" "svim_$A.all.vcf.gz"; tabix -f -p vcf "asm_$A.vcf.gz"
   bcftools view -s "$S" -c1 -r "$AUTOS" -i 'SVTYPE="DEL"||SVTYPE="INS"' -Oz -o "ours_$A.vcf.gz" set.vcf.gz; tabix -f -p vcf "ours_$A.vcf.gz"
   [ "$(bcftools view -H "asm_$A.vcf.gz" | wc -l)" -gt 1000 ] || { echo "too few assembly calls: $A"; exit 1; }
   log "truvari bench $A"
-  rm -rf "bench_$A"
+  rm -rf -- "bench_${A:?}"
   "$TRU" bench -b "asm_$A.vcf.gz" -c "ours_$A.vcf.gz" -o "bench_$A" \
     --sizemin 50 --sizemax 100000 --pctsize 0.7 --pctseq 0 --refdist 1000 --dup-to-ins > "bench_$A.log" 2>&1
   mark "bench_$A"

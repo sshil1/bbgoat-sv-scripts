@@ -7,7 +7,7 @@ for S in 50000 120000; do
     | perl -F'\t' -ane 'if(/^#/){print;next} $F[1]+=$ENV{S}; $F[7]=~s/END=(\d+)/"END=".($1+$ENV{S})/e; print join("\t",@F)' \
     | $E/bgzip -c > $W/shift$S.vcf.gz
   $E/tabix -f -p vcf $W/shift$S.vcf.gz
-  rm -rf $W/bench_shift$S
+  rm -rf -- "${W:?}/bench_shift${S:?}"
   $E/truvari bench -b $W/db8.vcf.gz -c $W/shift$S.vcf.gz -o $W/bench_shift$S --sizemin 50 --sizefilt 50 \
     --sizemax 100000 --pctseq 0 --pctsize 0.7 --refdist 500 --dup-to-ins > $W/bench_shift$S.log 2>&1 \
     || { echo "truvari failed (shift $S):"; tail -5 $W/bench_shift$S.log; exit 1; }
