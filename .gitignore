@@ -5,3 +5,4 @@
 *.bed
 *.tsv
 .env
+__pycache__/
