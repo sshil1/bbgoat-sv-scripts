@@ -5,5 +5,6 @@ cd "$(dirname "$0")/../scripts"
 fail=0
 for f in *.sh; do bash -n "$f" || { echo "SYNTAX FAIL $f"; fail=1; }; done
 for f in *.py; do [ -e "$f" ] && { python3 -I -m py_compile "$f" || fail=1; }; done
+[ -d ../tests ] && python3 -I -m unittest discover -s ../tests || fail=1
 command -v shellcheck >/dev/null && shellcheck -S warning *.sh || true
 exit $fail
