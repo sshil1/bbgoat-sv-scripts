@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use these scripts, please cite the Data Note and this archive."
+title: "bbgoat-sv-scripts: analysis scripts for structural variants from two Black Bengal goat HiFi genomes"
+authors:
+  - family-names: Shil
+    given-names: Sharadindu
+    orcid: "https://orcid.org/0000-0002-6167-2244"
+license: MIT
